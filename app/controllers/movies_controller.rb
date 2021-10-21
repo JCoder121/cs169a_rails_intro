@@ -1,44 +1,59 @@
 class MoviesController < ApplicationController
   
   #before_action :get_movie_from_session
-  after_action :store_movie_in_session
+  #after_action :store_movie_in_session
 
   def show
     id = params[:id] # retrieve movie ID from URI route
     @movie = Movie.find(id) # look up movie by unique ID
     # will render app/views/movies/show.<extension> by default
   end
-
-  def index
-    ratings_list = params[:ratings]
-    @all_ratings = Movie.all_ratings()
-    #sort movies with ratings by params[:sort] if they are present
-    
-    @column_clicked = params[:sort]
-    if !session[:sort].blank?
-      @column_clicked = session[:sort]
-    end
-    
-    @ratings_to_show = Movie.ratings_to_show(ratings_list)
-    if !session[:ratings_to_show].blank?
-      @ratings_to_show = session[:ratings_to_show]
-    end
+ 
   
-    @movies = Movie.with_ratings(ratings_list).order(params[:sort])
-    if !session[:movies].blank?
-      @movies = session[:movies]
+  def index
+    #debugging prints
+    puts "session sort: " + session[:sort].to_s    
+    puts "session ratings: " + session[:ratings_to_show].to_s
+    
+    #if params has no sort option but session remembered a sort option, set that option for column_clickeed
+    #for refresh button to remember which should be highlighted
+    if (params[:sort].blank? && !session[:sort].blank?)
+      @column_clicked = session[:sort]
+    else 
+      @column_clicked = params[:sort]
+      session[:sort] = params[:sort]
     end
+    #debugging prints
+    puts "column clicked assigned: " + @column_clicked.to_s
+    puts "session is now: " + session[:sort].to_s
+    
+    #same procedure as above: if params has no ratings option but session does, set that option for ratings_list
+    #to be used to grab ratings_to_show
+    if(params[:ratings].blank? && !session[:ratings].blank?)
+      ratings_list = session[:ratings]
+    else 
+      ratings_list = params[:ratings]
+      session[:ratings] = params[:ratings]
+    end
+    
+    #debugging prints
+    puts "ratings list is now: " + ratings_list.to_s
 
-    session[:sort] = params[:sort]
-    session[:ratings_to_show] = @ratings_to_show
+    @all_ratings = Movie.all_ratings()
+    @ratings_to_show = Movie.ratings_to_show(ratings_list)
+    @movies = Movie.with_ratings(ratings_list).order(@column_clicked)
     
   end
-    
   
   def store_movie_in_session
     session[:movies] = @movies
     session[:ratings_to_show] = @ratings_to_show
     session[:sort] = params[:sort]
+  end
+
+  def get_movie_from_session
+    @movies = session[:movies]
+    @ratings_to_show = session[:ratings_to_show]
   end
 
   def new

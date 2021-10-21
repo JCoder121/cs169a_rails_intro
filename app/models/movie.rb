@@ -12,8 +12,8 @@ class Movie < ActiveRecord::Base
   
   def self.ratings_to_show(ratings_list)
     if(ratings_list.blank?())
-      #return ratings to show, which is an empty list (first time accessing)
-      @ratings_to_show
+      #if first time accessing page, make sure to check all boxes
+      @ratings_to_show = ['G','PG','PG-13','R']
     else
       #return ratings to show where only in keys of ratings_list
       @ratings_to_show = ratings_list.keys
