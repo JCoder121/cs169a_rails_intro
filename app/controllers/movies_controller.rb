@@ -1,4 +1,7 @@
 class MoviesController < ApplicationController
+  
+  #before_action :get_movie_from_session
+  after_action :store_movie_in_session
 
   def show
     id = params[:id] # retrieve movie ID from URI route
@@ -9,12 +12,33 @@ class MoviesController < ApplicationController
   def index
     ratings_list = params[:ratings]
     @all_ratings = Movie.all_ratings()
-
     #sort movies with ratings by params[:sort] if they are present
-    @movies = Movie.with_ratings(ratings_list).order(params[:sort])
-    @ratings_to_show = Movie.ratings_to_show(ratings_list)
-    @column_clicked = params[:sort]
     
+    @column_clicked = params[:sort]
+    if !session[:sort].blank?
+      @column_clicked = session[:sort]
+    end
+    
+    @ratings_to_show = Movie.ratings_to_show(ratings_list)
+    if !session[:ratings_to_show].blank?
+      @ratings_to_show = session[:ratings_to_show]
+    end
+  
+    @movies = Movie.with_ratings(ratings_list).order(params[:sort])
+    if !session[:movies].blank?
+      @movies = session[:movies]
+    end
+
+    session[:sort] = params[:sort]
+    session[:ratings_to_show] = @ratings_to_show
+    
+  end
+    
+  
+  def store_movie_in_session
+    session[:movies] = @movies
+    session[:ratings_to_show] = @ratings_to_show
+    session[:sort] = params[:sort]
   end
 
   def new
