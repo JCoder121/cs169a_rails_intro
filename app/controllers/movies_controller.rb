@@ -9,8 +9,11 @@ class MoviesController < ApplicationController
   def index
     ratings_list = params[:ratings]
     @all_ratings = Movie.all_ratings()
-    @movies = Movie.with_ratings(ratings_list)
+
+    #sort movies with ratings by params[:sort] if they are present
+    @movies = Movie.with_ratings(ratings_list).order(params[:sort])
     @ratings_to_show = Movie.ratings_to_show(ratings_list)
+    @column_clicked = params[:sort]
     
   end
 

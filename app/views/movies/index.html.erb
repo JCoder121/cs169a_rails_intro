@@ -16,9 +16,13 @@
 <table class="table table-striped col-md-12" id="movies">
   <thead>
     <tr>
-      <th>Movie Title</th>
+      <!-- ORIGINAL: <th><a>Movie Title</a></th> -->
+      <!--<th class="hilite p-3 mb-2 bg-warning text-dark" id="title_header"><%= link_to "Movie Title", :sort => "title"%></th> -->
+      <!-- movies_path(params[:sort].to_h { |x| [x, 1] }), -->
+      <th class="<%= 'hilite p-3 mb-2 bg-warning text-dark' if @column_clicked == 'title' %>"><%= link_to "Movie Title", :sort => "title", id: 'title_header'%></th>
       <th>Rating</th>
-      <th>Release Date</th>
+      <!--ORIGINAL: <th>Release Date</th>-->
+      <th class="<%= 'hilite p-3 mb-2 bg-warning text-dark' if @column_clicked == 'release_date' %>"><%= link_to "Release Date", :sort => "release_date", id: 'release_date_header'%></th>
       <th>More Info</th>
     </tr>
   </thead>
@@ -35,10 +39,12 @@
           <%= movie.release_date %>
         </td>
         <td>
-          <%= link_to "More about #{movie.title}", movie_path(movie) %>
+          <!-- @ratings_to_show.to_h { |x| [x, 1] }  -->
+          <%= link_to "More about #{movie.title}", movie_path(movie) %> 
         </td>
       </tr>
     <% end %>
   </tbody>
 </table>
 <%= link_to 'Add new movie', new_movie_path, :class => 'btn btn-primary' %>
+
