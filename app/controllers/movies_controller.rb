@@ -27,7 +27,21 @@ class MoviesController < ApplicationController
     '''
     
     #debugging prints
-    #puts "session sort: " + session[:sort].to_s    
+    #puts "session sort: " + session[:sort].to_s   
+    
+    #see if session sort has stuff in it, if so, redirect immediately
+    
+    '''
+    if (!session[:sort].blank?)
+      if (!session[:ratings].blank?) 
+        redirect_to movies_path({:sort => session[:sort], :ratings => session[:ratings]}) and return
+
+      else
+        redirect_to movies_path({:sort => session[:sort]}) and return
+      end
+    end
+    '''
+    
 
     #if params has no sort option but session remembered a sort option, set that option for column_clicked
     #for refresh button to remember which should be highlighted
@@ -65,7 +79,7 @@ class MoviesController < ApplicationController
     end
     
     #debugging prints
-    #puts "ratings list is now: " + ratings_list.to_s
+    puts "ratings list is now: " + ratings_list.to_s
 
     @all_ratings = Movie.all_ratings()
     @ratings_to_show = Movie.ratings_to_show(ratings_list)

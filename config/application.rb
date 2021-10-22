@@ -20,6 +20,22 @@ module Rottenpotatoes
     # config.i18n.load_path += Dir[Rails.root.join('my', 'locales', '*.{rb,yml}').to_s]
     # config.i18n.default_locale = :de
 
+    '''
+    get  do
+      redirect 
+    end
+    
+    get 
+      erb :index
+    '''
+    
+    get '/' do
+      redirect_to(movies_path)
+    end
+    
+    get '/movies' do
+      redirect_to(movies_path)
+    end
     # Do not swallow errors in after_commit/after_rollback callbacks.
     config.active_record.raise_in_transactional_callbacks = true
   end
