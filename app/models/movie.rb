@@ -4,7 +4,8 @@ class Movie < ActiveRecord::Base
   #where all_ratings = empty array
 
   @ratings_to_show = []
-  @all_ratings = ['G','PG','PG-13','R']
+  #@all_ratings = ['G','PG','PG-13','R']
+  @all_ratings = Movie.distinct.pluck(:rating)
   
   def self.all_ratings()
     @all_ratings
@@ -13,7 +14,10 @@ class Movie < ActiveRecord::Base
   def self.ratings_to_show(ratings_list)
     if(ratings_list.blank?())
       #if first time accessing page, make sure to check all boxes
-      @ratings_to_show = ['G','PG','PG-13','R']
+      #THIS COULD BE PROBLEMATIC, GET ALL RATINGS FROM ACTIVE RECORD NOT HARD CODED
+      #solved: use model.distinct.pluck(:rating)
+      #@ratings_to_show = ['G','PG','PG-13','R']
+      @ratings_to_show = Movie.distinct.pluck(:rating)
     else
       #return ratings to show where only in keys of ratings_list
       @ratings_to_show = ratings_list.keys

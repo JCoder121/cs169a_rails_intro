@@ -3,6 +3,7 @@
 
 <!--%#  Part 1: Start here... % -->
 <%= form_tag movies_path, method: :get, id: 'ratings_form' do %>
+  <%= hidden_field_tag :sort, @column_clicked %> 
   Include:
   <% @all_ratings.each do |rating| %>
     <div class="form-check  form-check-inline">
@@ -22,11 +23,12 @@
       <!-- movies_path(@column_clicked.to_a.to_h { |x| [x, 1]}),-->
       <!-- movies_path(@ratings_to_show.to_h { |x| [x, 1]),-->
       <!-- :ratings_to_show => @ratings_to_show, -->
-      <th class="<%= 'hilite p-3 mb-2 bg-warning text-dark' if @column_clicked == 'title' %>", id: 'title_header'><%= link_to "Movie Title", movies_path(@ratings_to_show.to_h { |x| [x, 1]}, :sort => "title") %></th>
+      <th class="<%= 'hilite p-3 mb-2 bg-warning text-dark' if @column_clicked == 'title' %>", id: 'title_header'><%= link_to "Movie Title", movies_path({:sort => :title, :ratings => @ratings_to_show.to_h { |x| [x, 1]}}) %></th>
       <th>Rating</th>
       <!--ORIGINAL: <th>Release Date</th>-->
       <!-- <th class="<= 'hilite p-3 mb-2 bg-warning text-dark' if @column_clicked == 'release_date' >"><= link_to "Release Date", :sort => "release_date", id: 'release_date_header'></th> -->
-      <th class="<%= 'hilite p-3 mb-2 bg-warning text-dark' if @column_clicked == 'release_date' %>", id: 'release_date_header'><%= link_to "Release Date", movies_path(@ratings_to_show.to_h { |x| [x, 1]}, :sort => "release_date") %></th>
+      <!-- <th class="<= 'hilite p-3 mb-2 bg-warning text-dark' if @column_clicked == 'release_date' %>", id: 'release_date_header'><= link_to "Release Date", movies_path(@ratings_to_show.to_h { |x| [x, 1]}, :sort => "release_date") %></th> -->
+      <th class="<%= 'hilite p-3 mb-2 bg-warning text-dark' if @column_clicked == 'release_date' %>", id: 'release_date_header'><%= link_to "Release Date", movies_path({:sort => :release_date, :ratings => @ratings_to_show.to_h { |x| [x, 1]}}) %></th>
       <th>More Info</th>
     </tr>
   </thead>
